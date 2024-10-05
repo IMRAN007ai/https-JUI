@@ -1,0 +1,557 @@
+<html><head><base href="https://jui.ai/"><title>JUI - AI Generated Marketplace</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --accent-color: #e74c3c;
+  --text-color: #333;
+  --bg-color: #f5f5f5;
+  --header-bg: #fff;
+  --card-bg: #fff;
+}
+
+body.dark-mode {
+  --primary-color: #2980b9;
+  --secondary-color: #27ae60;
+  --accent-color: #c0392b;
+  --text-color: #f5f5f5;
+  --bg-color: #2c3e50;
+  --header-bg: #34495e;
+  --card-bg: #34495e;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+header {
+  background-color: var(--header-bg);
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #ff0000;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.btn-accent {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.hero {
+  position: relative;
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.hero-content {
+  text-align: center;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-info {
+  padding: 1rem;
+}
+
+.card-info h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.card-info p {
+  margin: 0 0 1rem 0;
+}
+
+.buy-btn {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.buy-btn:hover {
+  background-color: var(--secondary-color);
+}
+
+#paymentModal, #salesSheetModal, #fileUploadModal, #rejectedFilesModal, #highResModal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: var(--bg-color);
+  margin: 15% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.close {
+  color: var(--text-color);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.payment-option {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.payment-option:hover {
+  background-color: var(--secondary-color);
+}
+
+#salesSheet {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#salesSheet th, #salesSheet td {
+  border: 1px solid var(--text-color);
+  padding: 8px;
+  text-align: left;
+}
+
+#salesSheet th {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+#salesSheet tr:nth-child(even) {
+  background-color: var(--card-bg);
+}
+
+#fileInput {
+  display: none;
+}
+
+.file-upload-label {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.file-upload-label:hover {
+  background-color: var(--secondary-color);
+}
+
+</style>
+</head>
+<body>
+<header>
+  <nav>
+    <div class="logo">JUI</div>
+    <div class="nav-buttons">
+      <button id="fileUploadBtn" class="btn btn-primary">File Upload</button>
+      <button id="rejectedFilesBtn" class="btn btn-secondary">Rejected Files</button>
+      <button id="homeBtn" class="btn btn-primary">Home</button>
+      <button id="paymentMethodsBtn" class="btn btn-secondary">Payment Methods</button>
+      <button id="highResBtn" class="btn btn-primary">High Resolution AI Files</button>
+      <button id="darkModeToggle" class="btn btn-secondary">Dark Mode</button>
+      <button id="salesSheetBtn" class="btn btn-accent">Sales Sheet</button>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <img src="https://source.unsplash.com/random/1920x1080/?ai,technology,futuristic" alt="Futuristic AI-generated banner image" class="hero-image">
+    <div class="hero-content">
+      <h1>Welcome to JUI</h1>
+      <p>Your premier marketplace for AI-generated content. Upload, sell, and discover amazing digital creations from around the world.</p>
+    </div>
+  </section>
+
+  <section class="grid" id="contentGrid">
+    <!-- Dynamically generated content items will be inserted here -->
+  </section>
+</main>
+
+<div id="paymentModal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Choose Payment Method</h2>
+    <button class="payment-option" data-method="paypal">PayPal</button>
+    <button class="payment-option" data-method="bkash">bKash</button>
+    <button class="payment-option" data-method="nogod">Nogod</button>
+  </div>
+</div>
+
+<div id="salesSheetModal">
+  <div class="modal-content" style="width: 80%; max-width: 800px;">
+    <span class="close">&times;</span>
+    <h2>Sales Sheet</h2>
+    <table id="salesSheet">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Type</th>
+          <th>Price</th>
+          <th>Date Sold</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Sales data will be dynamically inserted here -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="fileUploadModal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Upload File</h2>
+    <input type="file" id="fileInput" accept="image/*,video/*,.ai,.eps,.svg">
+    <label for="fileInput" class="file-upload-label">Choose File</label>
+    <p id="uploadStatus"></p>
+  </div>
+</div>
+
+<div id="rejectedFilesModal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Rejected Files</h2>
+    <ul id="rejectedFilesList">
+      <!-- Rejected files will be listed here -->
+    </ul>
+  </div>
+</div>
+
+<div id="highResModal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>High Resolution AI Files</h2>
+    <ul id="highResList">
+      <!-- High resolution files will be listed here -->
+    </ul>
+  </div>
+</div>
+
+<script>
+const darkModeToggle = document.getElementById('darkModeToggle');
+const body = document.body;
+const contentGrid = document.getElementById('contentGrid');
+const paymentModal = document.getElementById('paymentModal');
+const salesSheetModal = document.getElementById('salesSheetModal');
+const fileUploadModal = document.getElementById('fileUploadModal');
+const rejectedFilesModal = document.getElementById('rejectedFilesModal');
+const highResModal = document.getElementById('highResModal');
+const salesSheetBtn = document.getElementById('salesSheetBtn');
+const fileUploadBtn = document.getElementById('fileUploadBtn');
+const rejectedFilesBtn = document.getElementById('rejectedFilesBtn');
+const homeBtn = document.getElementById('homeBtn');
+const paymentMethodsBtn = document.getElementById('paymentMethodsBtn');
+const highResBtn = document.getElementById('highResBtn');
+const closeBtns = document.querySelectorAll('.close');
+const fileInput = document.getElementById('fileInput');
+const uploadStatus = document.getElementById('uploadStatus');
+
+let salesData = [];
+let rejectedFiles = [];
+let highResFiles = [];
+
+darkModeToggle.addEventListener('click', () => {
+  body.classList.toggle('dark-mode');
+  darkModeToggle.textContent = body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+});
+
+function generateRandomPrice(min, max) {
+  return (Math.random() * (max - min) + min).toFixed(2);
+}
+
+function generateContent(count) {
+  contentGrid.innerHTML = ''; // Clear existing content
+  for (let i = 0; i < count; i++) {
+    const isPhoto = Math.random() > 0.3;
+    const type = isPhoto ? 'photo' : 'video';
+    const price = isPhoto ? generateRandomPrice(1, 5) : generateRandomPrice(5, 20);
+    const contentItem = document.createElement('div');
+    contentItem.classList.add('card');
+    contentItem.innerHTML = `
+      <img src="https://source.unsplash.com/random/300x200?sig=${i}" alt="AI-generated ${type} ${i+1}">
+      <div class="card-info">
+        <h3>AI ${type.charAt(0).toUpperCase() + type.slice(1)} ${i+1}</h3>
+        <p>Price: $${price}</p>
+        <a href="#" class="buy-btn" data-price="${price}" data-type="${type}">Buy Now</a>
+      </div>
+    `;
+    contentGrid.appendChild(contentItem);
+  }
+}
+
+generateContent(15);  // Generate 15 random content items
+
+contentGrid.addEventListener('click', (e) => {
+  if (e.target.classList.contains('buy-btn')) {
+    e.preventDefault();
+    const price = e.target.dataset.price;
+    const type = e.target.dataset.type;
+    document.querySelector('.modal-content h2').textContent = `Choose Payment Method for $${price}`;
+    paymentModal.style.display = 'block';
+    
+    // Add to sales data
+    salesData.push({
+      item: `AI ${type.charAt(0).toUpperCase() + type.slice(1)}`,
+      type: type,
+      price: price,
+      dateSold: new Date().toLocaleDateString()
+    });
+  }
+});
+
+closeBtns.forEach(btn => {
+  btn.onclick = () => {
+    paymentModal.style.display = 'none';
+    salesSheetModal.style.display = 'none';
+    fileUploadModal.style.display = 'none';
+    rejectedFilesModal.style.display = 'none';
+    highResModal.style.display = 'none';
+  };
+});
+
+window.onclick = (e) => {
+  if (e.target === paymentModal) {
+    paymentModal.style.display = 'none';
+  }
+  if (e.target === salesSheetModal) {
+    salesSheetModal.style.display = 'none';
+  }
+  if (e.target === fileUploadModal) {
+    fileUploadModal.style.display = 'none';
+  }
+  if (e.target === rejectedFilesModal) {
+    rejectedFilesModal.style.display = 'none';
+  }
+  if (e.target === highResModal) {
+    highResModal.style.display = 'none';
+  }
+};
+
+document.querySelectorAll('.payment-option').forEach(button => {
+  button.addEventListener('click', (e) => {
+    const method = e.target.dataset.method;
+    processPayment(method);
+    paymentModal.style.display = 'none';
+  });
+});
+
+function processPayment(method) {
+  console.log(`Processing payment with ${method}`);
+  alert(`Payment processed successfully with ${method}!`);
+}
+
+salesSheetBtn.addEventListener('click', () => {
+  const salesSheetBody = document.querySelector('#salesSheet tbody');
+  salesSheetBody.innerHTML = '';
+  salesData.forEach(sale => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${sale.item}</td>
+      <td>${sale.type}</td>
+      <td>$${sale.price}</td>
+      <td>${sale.dateSold}</td>
+    `;
+    salesSheetBody.appendChild(row);
+  });
+  salesSheetModal.style.display = 'block';
+});
+
+fileUploadBtn.addEventListener('click', () => {
+  fileUploadModal.style.display = 'block';
+});
+
+fileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    uploadFile(file);
+  }
+});
+
+function uploadFile(file) {
+  uploadStatus.textContent = 'Uploading...';
+  setTimeout(() => {
+    if (file.type === 'image/svg+xml' || file.name.endsWith('.ai') || file.name.endsWith('.eps')) {
+      uploadStatus.textContent = 'Vector file uploaded and automatically approved!';
+      highResFiles.push(file.name);
+    } else {
+      uploadStatus.textContent = 'File uploaded successfully. Pending review.';
+      const random = Math.random();
+      if (random < 0.2) {
+        rejectedFiles.push(file.name);
+      }
+    }
+  }, 2000);
+}
+
+rejectedFilesBtn.addEventListener('click', () => {
+  const rejectedFilesList = document.getElementById('rejectedFilesList');
+  rejectedFilesList.innerHTML = '';
+  if (rejectedFiles.length === 0) {
+    rejectedFilesList.innerHTML = '<li>No rejected files</li>';
+  } else {
+    rejectedFiles.forEach(file => {
+      const li = document.createElement('li');
+      li.textContent = file;
+      rejectedFilesList.appendChild(li);
+    });
+  }
+  rejectedFilesModal.style.display = 'block';
+});
+
+homeBtn.addEventListener('click', () => {
+  generateContent(15);
+});
+
+paymentMethodsBtn.addEventListener('click', () => {
+  paymentModal.style.display = 'block';
+});
+
+highResBtn.addEventListener('click', () => {
+  const highResList = document.getElementById('highResList');
+  highResList.innerHTML = '';
+  if (highResFiles.length === 0) {
+    highResList.innerHTML = '<li>No high resolution files yet</li>';
+  } else {
+    highResFiles.forEach(file => {
+      const li = document.createElement('li');
+      li.textContent = file;
+      highResList.appendChild(li);
+    });
+  }
+  highResModal.style.display = 'block';
+});
+
+// Initialize with some sample data
+salesData = [
+  {item: 'AI Photo 1', type: 'photo', price: '3.99', dateSold: '2023-05-01'},
+  {item: 'AI Video 1', type: 'video', price: '15.99', dateSold: '2023-05-02'},
+];
+
+rejectedFiles = ['low_quality_image.jpg', 'copyrighted_content.png'];
+highResFiles = ['vector_illustration.svg', 'high_res_background.ai'];
+
+</script>
+</body>
+</html>
